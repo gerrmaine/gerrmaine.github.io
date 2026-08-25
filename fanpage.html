@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willy Wonka | Fan Page</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Special+Elite&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --burgundy:#6B1424;
+    --burgundy-dark:#3B0A14;
+    --mustard:#D4A017;
+    --mustard-light:#F2C94C;
+    --forest:#2F5233;
+    --forest-light:#4F7942;
+    --cream:#F3E7CE;
+    --paper:#EADFC4;
+    --ink:#241209;
+    --shadow: 0 14px 32px rgba(0,0,0,.45);
+  }
+
+  *{ box-sizing:border-box; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    margin:0;
+    background: var(--burgundy-dark);
+    color: var(--cream);
+    font-family:'Poppins', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+
+  body.night{ background:#160306; }
+
+  h1,h2,h3{ margin:0; }
+  .display{ font-family:'Abril Fatface', serif; font-weight:400; letter-spacing:.5px; }
+  .stamp{ font-family:'Special Elite', monospace; }
+
+  a{ color:inherit; }
+  img, svg{ display:block; max-width:100%; }
+  ::selection{ background:var(--mustard); color:var(--ink); }
+
+  /* ---------- ticket-stub shape (signature cut used across the page) ---------- */
+  .stub{
+    clip-path: polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px);
+  }
+
+  .wrap{ max-width:1100px; margin:0 auto; padding:0 28px; }
+  .eyebrow{
+    font-family:'Special Elite', monospace;
+    text-transform:uppercase;
+    letter-spacing:3px;
+    font-size:.72rem;
+    color:var(--mustard-light);
+    display:inline-block;
+    margin-bottom:12px;
+  }
+  .section{ padding:100px 0; position:relative; }
+
+  .reveal{ opacity:0; transform:translateY(26px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.in{ opacity:1; transform:translateY(0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+    html{ scroll-behavior:auto; }
+  }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:var(--mustard);
+    color:var(--ink);
+    text-decoration:none;
+    border:none;
+    font-family:'Special Elite', monospace;
+    font-size:.95rem;
+    padding:14px 26px;
+    cursor:pointer;
+    box-shadow:0 6px 0 #8a6408;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn:active{ transform:translateY(3px); box-shadow:0 2px 0 #8a6408; }
+  .btn:disabled{ opacity:.6; cursor:not-allowed; }
+  .btn:focus-visible, a:focus-visible, button:focus-visible{
+    outline:3px solid var(--forest-light);
+    outline-offset:3px;
+  }
+  .btn.outline{ background:transparent; color:var(--mustard-light); border:2px solid var(--mustard); box-shadow:none; }
+
+  /* ---------- nav ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 30px;
+    background:linear-gradient(180deg, rgba(59,10,20,.94), rgba(59,10,20,0));
+  }
+  nav .brand{
+    font-family:'Abril Fatface', serif;
+    font-size:1.2rem;
+    color:var(--mustard-light);
+  }
+  nav ul{ list-style:none; display:flex; gap:24px; margin:0; padding:0; font-size:.82rem; font-family:'Special Elite', monospace;}
+  nav ul a{ text-decoration:none; opacity:.85; }
+  nav ul a:hover{ opacity:1; color:var(--mustard-light); }
+  .nav-controls{ display:flex; gap:10px; }
+  .icon-btn{
+    background:var(--forest);
+    border:1px solid var(--mustard);
+    color:var(--cream);
+    font-size:.85rem;
+    padding:8px 12px;
+    cursor:pointer;
+    display:flex; align-items:center; gap:6px;
+  }
+  .icon-btn:hover{ background:var(--forest-light); }
+
+  @media (max-width:720px){ nav ul{ display:none; } }
+
+  /* ---------- HERO with photo ---------- */
+  .hero{
+    position:relative;
+    min-height:88vh;
+    display:flex; align-items:flex-end;
+    overflow:hidden;
+  }
+  .hero-photo-frame{
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(135deg, var(--burgundy) 0 26px, var(--burgundy-dark) 26px 52px);
+  }
+  .hero-photo-frame img.user-photo{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    object-position:center 20%;
+  }
+  .hero-photo-frame.missing::after{
+    content:"🎩  Drop your Wonka photo here\A images/wonka-hero.jpg";
+    white-space:pre-line;
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center;
+    font-family:'Special Elite', monospace;
+    color:rgba(243,231,206,.55);
+    font-size:1rem;
+    letter-spacing:1px;
+  }
+  .hero-photo-frame::before{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(59,10,20,.15) 0%, rgba(59,10,20,.55) 55%, rgba(59,10,20,.96) 100%);
+    z-index:2;
+  }
+
+  .hero-content{
+    position:relative; z-index:3;
+    padding:0 28px 70px;
+    max-width:760px;
+    margin:0 auto;
+    text-align:center;
+  }
+  .ticket-badge{
+    display:inline-block;
+    background:var(--mustard);
+    color:var(--ink);
+    font-family:'Special Elite', monospace;
+    font-size:.78rem;
+    letter-spacing:2px;
+    padding:6px 16px;
+    margin-bottom:18px;
+    transform:rotate(-2deg);
+  }
+  .hero h1{
+    font-size:clamp(3.2rem, 9vw, 6rem);
+    color:var(--mustard-light);
+    text-shadow:0 6px 0 var(--burgundy-dark);
+    line-height:.95;
+    margin-bottom:16px;
+  }
+  .hero .tagline{
+    font-size:1.05rem;
+    color:var(--paper);
+    max-width:460px;
+    margin:0 auto 28px;
+  }
+  .hero .cta-row{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* ---------- bio ---------- */
+  .bio-grid{ display:grid; grid-template-columns:240px 1fr; gap:56px; align-items:center; }
+  @media (max-width:760px){ .bio-grid{ grid-template-columns:1fr; } }
+
+  .badge-frame{
+    width:220px; height:220px; margin:0 auto;
+    background: repeating-linear-gradient(45deg, var(--forest) 0 12px, var(--forest-light) 12px 24px);
+    border:5px solid var(--mustard);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:var(--shadow);
+  }
+  .badge-frame svg{ width:58%; }
+
+  .bio h2{ font-family:'Abril Fatface', serif; font-size:2.1rem; color:var(--mustard-light); margin-bottom:6px;}
+  .bio .role{ font-family:'Special Elite', monospace; color:var(--mustard); font-size:.85rem; display:block; margin-bottom:16px; }
+  .bio p{ color:var(--paper); max-width:560px; }
+  .bio p + p{ margin-top:14px; }
+
+  .stat-row{ display:flex; gap:16px; margin-top:24px; flex-wrap:wrap; }
+  .stat{
+    background:rgba(212,160,23,.08);
+    border:1px solid var(--mustard);
+    padding:12px 16px;
+    min-width:120px;
+  }
+  .stat b{ font-family:'Abril Fatface', serif; font-size:1.3rem; color:var(--mustard-light); display:block; }
+  .stat span{ font-size:.72rem; color:var(--paper); }
+
+  /* ---------- section titles ---------- */
+  .section-title{ text-align:center; margin-bottom:52px; }
+  .section-title h2{ font-family:'Abril Fatface', serif; font-size:2.2rem; color:var(--mustard-light); }
+  .section-title p{ color:var(--paper); max-width:480px; margin:10px auto 0; }
+
+  /* ---------- facts (ticket stub cards) ---------- */
+  .fact-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  @media (max-width:820px){ .fact-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:560px){ .fact-grid{ grid-template-columns:1fr; } }
+
+  .fact-card{
+    background:var(--paper);
+    color:var(--ink);
+    padding:24px 22px;
+    position:relative;
+    border-left:5px solid var(--forest);
+    transition:transform .2s ease;
+  }
+  .fact-card:hover{ transform:translateY(-5px); }
+  .fact-card .num{ font-family:'Special Elite', monospace; color:var(--burgundy); font-size:.75rem; letter-spacing:2px; }
+  .fact-card h3{ font-size:1.02rem; margin:8px 0; color:var(--burgundy); }
+  .fact-card p{ font-size:.88rem; margin:0; color:#3a2a15; }
+
+  /* ---------- wheel ---------- */
+  .wheel-section{ background:radial-gradient(ellipse 80% 60% at 50% 0%, rgba(212,160,23,.10), transparent 70%); }
+  .wheel-layout{ display:flex; gap:56px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .wheel-holder{ position:relative; width:min(340px, 78vw); height:min(340px, 78vw); flex:none; }
+  .pointer{
+    position:absolute; top:-16px; left:50%; transform:translateX(-50%);
+    width:0; height:0;
+    border-left:15px solid transparent; border-right:15px solid transparent;
+    border-top:24px solid var(--mustard);
+    z-index:5;
+    filter:drop-shadow(0 3px 3px rgba(0,0,0,.5));
+  }
+  #wheel{
+    width:100%; height:100%; border-radius:50%;
+    border:8px solid var(--mustard);
+    box-shadow:var(--shadow), inset 0 0 30px rgba(0,0,0,.5);
+    background: conic-gradient(
+      var(--burgundy) 0deg 45deg, var(--mustard) 45deg 90deg,
+      var(--forest) 90deg 135deg, var(--paper) 135deg 180deg,
+      var(--burgundy) 180deg 225deg, var(--mustard) 225deg 270deg,
+      var(--forest) 270deg 315deg, var(--paper) 315deg 360deg
+    );
+    position:relative;
+    transition: transform 3.4s cubic-bezier(.15,.85,.25,1);
+  }
+  #wheel img.wheel-image{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    object-fit:cover;
+    border-radius:50%;
+    z-index:1;
+  }
+  #wheel .seg-label{
+    position:absolute; top:50%; left:50%;
+    width:44%;
+    transform-origin:left center;
+    font-size:.64rem;
+    font-family:'Special Elite', monospace;
+    color:var(--cream);
+    text-shadow:0 1px 3px rgba(0,0,0,.7);
+    text-align:right;
+    padding-right:16px;
+    z-index:1;
+    pointer-events:none;
+    line-height:1.2;
+  }
+  /* if a custom wheel image loads successfully, hide the text labels so they don't sit on top of it */
+  #wheel.has-image .seg-label{ display:none; }
+  #wheel .hub{
+    position:absolute; top:50%; left:50%; width:20%; height:20%;
+    transform:translate(-50%,-50%);
+    background:var(--cream); border:4px solid var(--mustard); border-radius:50%;
+    box-shadow:0 0 12px rgba(0,0,0,.4);
+    z-index:2;
+  }
+  .wheel-copy{ max-width:380px; }
+  .wheel-copy h2{ font-family:'Abril Fatface', serif; font-size:1.8rem; color:var(--mustard-light); margin-bottom:14px; }
+  .wheel-copy p{ color:var(--paper); margin-bottom:20px; }
+  .result-box{
+    margin-top:20px; min-height:74px;
+    background:var(--paper); color:var(--ink);
+    border-left:5px solid var(--burgundy);
+    padding:16px 18px; font-size:1rem;
+    opacity:0; transform:translateY(6px) scale(.98);
+    transition:opacity .4s ease, transform .4s ease;
+  }
+  .result-box.show{ opacity:1; transform:translateY(0) scale(1); }
+  .result-box b{ color:var(--burgundy); display:block; font-family:'Special Elite', monospace; font-size:.8rem; letter-spacing:1px; margin-bottom:6px; }
+
+  /* ---------- golden ticket unwrap ---------- */
+  .ticket-section{ background:linear-gradient(180deg, transparent, rgba(47,82,51,.15)); text-align:center; }
+  .choc-stage{ display:flex; justify-content:center; margin-bottom:30px; }
+  .choc-bar{
+    position:relative; width:250px; height:330px;
+  }
+  .wrapper-half{
+    position:absolute; top:0; bottom:0; width:50%;
+    background: repeating-linear-gradient(45deg, var(--burgundy) 0 10px, var(--burgundy-dark) 10px 20px);
+    border:3px solid var(--mustard);
+    z-index:3;
+    transition: transform 1s ease, opacity 1s ease;
+  }
+  .wrapper-half.left{ left:0; }
+  .wrapper-half.right{ right:0; }
+  .choc-bar.unwrapped .wrapper-half.left{ transform:translateX(-110%) rotate(-18deg); opacity:0; }
+  .choc-bar.unwrapped .wrapper-half.right{ transform:translateX(110%) rotate(18deg); opacity:0; }
+
+  .ticket-reveal{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2; }
+  .golden-ticket{
+    width:92%; height:70%;
+    background:linear-gradient(135deg, var(--mustard-light), var(--mustard) 55%, #a9780e);
+    background-size:220% 220%;
+    border:3px dashed var(--burgundy-dark);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:16px;
+    color:var(--burgundy-dark);
+  }
+  .choc-bar.unwrapped .golden-ticket{ animation: shimmer 2.4s ease-in-out infinite; }
+  @keyframes shimmer{ 0%,100%{ background-position:0% 50%;} 50%{ background-position:100% 50%;} }
+  .golden-ticket .gt-eyebrow{ font-family:'Special Elite', monospace; font-size:.68rem; letter-spacing:2px; margin-bottom:8px; }
+  .golden-ticket h3{ font-family:'Abril Fatface', serif; font-size:1.4rem; margin-bottom:8px; }
+  .golden-ticket p{ font-size:.78rem; margin:0; max-width:200px; }
+
+  .confetti{
+    position:fixed; top:-10px; width:8px; height:14px; z-index:200; pointer-events:none;
+    animation: fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform:translateY(105vh) rotate(360deg); opacity:.9; }
+  }
+
+  /* ---------- oompa loompas (hexagon grid) ---------- */
+  .oompa-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:26px;
+  }
+  @media (max-width:820px){ .oompa-grid{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:480px){ .oompa-grid{ grid-template-columns:1fr; } }
+
+  .oompa-card{ text-align:center; }
+  .hex-frame{
+    width:150px; height:170px; margin:0 auto 16px;
+    position:relative;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: repeating-linear-gradient(135deg, var(--forest) 0 14px, var(--forest-light) 14px 28px);
+    box-shadow:var(--shadow);
+  }
+  .hex-frame img.user-photo{
+    position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+  }
+  .hex-frame.missing::after{
+    content:"👷  add photo\A images/oompa-loompa-1.jpg";
+    white-space:pre-line;
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    text-align:center; font-size:.72rem; font-family:'Special Elite', monospace;
+    color:rgba(243,231,206,.6); padding:0 10px;
+  }
+  .oompa-card h3{ font-size:.98rem; color:var(--mustard-light); margin-bottom:6px; }
+  .oompa-card p{ font-size:.82rem; color:var(--paper); margin:0; }
+
+  /* ---------- cabinet ---------- */
+  .jar-row{ display:flex; gap:22px; overflow-x:auto; padding:12px 4px 20px; scroll-snap-type:x mandatory; }
+  .jar{
+    flex:none; scroll-snap-align:start; width:180px;
+    background:var(--paper); color:var(--ink);
+    border-top:5px solid var(--mustard);
+    padding:20px 16px; text-align:center;
+  }
+  .jar .lid{ width:56px; height:12px; background:var(--burgundy); margin:0 auto 10px; }
+  .jar .glass{ width:76px; height:76px; margin:0 auto 12px; display:flex; align-items:center; justify-content:center; font-size:1.6rem; background:var(--cream); border:2px solid var(--mustard); border-radius:50%; }
+  .jar h3{ font-size:.92rem; color:var(--burgundy); margin-bottom:6px; }
+  .jar p{ font-size:.78rem; margin:0; color:#3a2a15; }
+
+  /* ---------- floating music player ---------- */
+  .music-player{
+    position:fixed; bottom:22px; right:22px; z-index:60;
+    display:flex; align-items:center; gap:10px;
+    background:var(--burgundy-dark);
+    border:2px solid var(--mustard);
+    padding:10px 16px;
+    box-shadow:var(--shadow);
+  }
+  .music-player .disc{
+    width:26px; height:26px; border-radius:50%;
+    background:radial-gradient(circle, var(--ink) 0 6px, var(--mustard) 6px 8px, var(--ink) 8px 100%);
+  }
+  .music-player.playing .disc{ animation:spin 3s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  #musicBtn{
+    background:none; border:none; color:var(--cream); cursor:pointer;
+    font-family:'Special Elite', monospace; font-size:.8rem;
+    display:flex; align-items:center; gap:8px;
+  }
+
+  /* ---------- footer ---------- */
+  footer{ text-align:center; padding:50px 20px 90px; color:#c9a978; font-size:.8rem; border-top:1px solid rgba(212,160,23,.2); }
+  footer .brand{ color:var(--mustard-light); font-family:'Abril Fatface', serif; margin-bottom:6px; display:block; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="brand">Wonka</div>
+  <ul>
+    <li><a href="#bio">Bio</a></li>
+    <li><a href="#facts">Facts</a></li>
+    <li><a href="#wheel">Wheel</a></li>
+    <li><a href="#ticket">Golden Ticket</a></li>
+    <li><a href="#oompas">Oompa-Loompas</a></li>
+  </ul>
+  <div class="nav-controls">
+    <button id="themeToggle" class="icon-btn" aria-pressed="false">🌙 Night</button>
+  </div>
+</nav>
+
+<!-- HERO: swap the Wonka photo below -->
+<header class="hero">
+  <div class="hero-photo-frame" id="heroFrame">
+    <!-- 🖼️ SWAP IMAGE HERE: put your own photo in the /images folder and update this src.
+         Suggested filename: images/wonka-hero.jpg (any image works, this is just the default). -->
+    <img class="user-photo" src="images/wonka.webp" alt="Willy Wonka"
+         onerror="this.closest('.hero-photo-frame').classList.add('missing'); this.remove();">
+  </div>
+  <div class="hero-content">
+    <span class="ticket-badge">ADMIT ONE · FACTORY TOUR</span>
+    <h1 class="display">WONKA</h1>
+    <p class="tagline">A penniless dreamer, a suitcase of impossible recipes, and enough magic to change a whole city's idea of what chocolate could be.</p>
+    <div class="cta-row">
+      <a href="#ticket" class="btn stub">🎟️ Find the Golden Ticket</a>
+      <a href="#wheel" class="btn outline stub">🎡 Spin the Wheel</a>
+    </div>
+  </div>
+</header>
+
+<!-- BIO -->
+  <style>
+    .badge-frame {
+      width: 235px;
+      height: 300px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .user-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+
+<section class="section" id="bio">
+  <div class="wrap bio-grid reveal">
+    <div class="badge-frame">
+      <img class="user-photo" src="images/wonka1.jpg" alt="Willy Wonka"
+           onerror="this.remove();">
+    </div>
+    <div class="bio">
+      <span class="eyebrow">The Chocolatier</span>
+      <h2 class="display">Willy Wonka</h2>
+      <span class="role">Magician · Inventor · World's Most Ambitious Chocolatier</span>
+      <p>Long before he owned a single storefront, Willy Wonka stepped off a boat in a chocolate-obsessed city with twelve silver sovereigns, one suitcase, and a head full of recipes nobody had ever tasted. He couldn't read a contract to save his life — but he could make a chocolate bar do things chocolate had no business doing.</p>
+      <p>Raised on his mother's belief that good things never come to those who wait, he spent his early years learning sleight of hand and studying cacao in equal measure. By the time he opened his shop, he wasn't just selling candy — he was trying to prove that kindness and imagination could still beat a room full of greedy men in suits.</p>
+      <div class="stat-row">
+        <div class="stat"><b>12</b><span>sovereigns to his name</span></div>
+        <div class="stat"><b>5</b><span>golden tickets hidden</span></div>
+        <div class="stat"><b>∞</b><span>impossible ideas per minute</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FACTS -->
+<section class="section" id="facts">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">Sweet Trivia</span>
+      <h2 class="display">A Few Facts Worth Knowing</h2>
+      <p>Everything you'd want to know before you shake his hand — mind the fingers, he bites.</p>
+    </div>
+    <div class="fact-grid reveal">
+      <div class="fact-card"><span class="num">01</span><h3>Trained as a magician first</h3><p>Long before chocolate, sleight of hand was his first love — and it shows in every trick up his sleeve.</p></div>
+      <div class="fact-card"><span class="num">02</span><h3>Arrived with almost nothing</h3><p>He landed in the city with barely a coin, determined to open a shop in the world's chocolate capital.</p></div>
+      <div class="fact-card"><span class="num">03</span><h3>Outwitted a chocolate cartel</h3><p>A trio of greedy, established chocolatiers tried to squash the competition — he out-imagined every one of them.</p></div>
+      <div class="fact-card"><span class="num">04</span><h3>Can't read a word</h3><p>Illiteracy nearly cost him everything when he signed away his freedom in fine print he couldn't understand.</p></div>
+      <div class="fact-card"><span class="num">05</span><h3>Believes chocolate should mean something</h3><p>His recipes aren't just sweet — several are engineered to make people laugh, float, or remember someone they miss.</p></div>
+      <div class="fact-card"><span class="num">06</span><h3>Never travels without his hat</h3><p>Between top hat, cane, and coat, he keeps enough hidden gadgets to open a shop from a park bench.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- WHEEL -->
+
+<style>
+.wheel-layout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+}
+
+.wheel-holder {
+  width: 500px;
+  height: 500px;
+  position: relative;
+  flex-shrink: 0;
+}
+
+#wheel {
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+
+.wheel-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.wheel-copy {
+  max-width: 450px;
+}
+
+.pointer {
+  position: absolute;
+  top: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+</style>
+
+<section class="section wheel-section" id="wheel-section">
+  <div class="wrap">
+
+    <div class="section-title reveal">
+      <span class="eyebrow">Try It Yourself</span>
+      <h2 class="display">Spin the Invention Wheel</h2>
+      <p>Give it a spin and see which piece of Wonka lore you land on.</p>
+    </div>
+
+    <div class="wheel-layout reveal">
+
+      <div class="wheel-holder">
+        <div class="pointer" aria-hidden="true"></div>
+
+        <div id="wheel">
+          <img class="wheel-image"
+               src="images/invention-wheel.png"
+               alt="Invention wheel"
+               onerror="this.remove();">
+
+          <div class="hub"></div>
+        </div>
+      </div>
+
+      <div class="wheel-copy">
+        <h2 class="display">Feeling lucky?</h2>
+
+        <p>
+          Every good chocolatier trusts a bit of chance now and then.
+          Spin the wheel to reveal a new fact each time.
+        </p>
+
+        <button id="spinBtn" class="btn stub">
+          ✨ Spin the Wheel
+        </button>
+
+        <div class="result-box" id="resultBox">
+          <b>🎉 YOUR FACT WILL APPEAR HERE</b>
+          Click "Spin the Wheel" above — this box will fill in with a random Wonka fact once it stops.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- GOLDEN TICKET -->
+<section class="section ticket-section" id="ticket">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">Somewhere, Five Are Hidden</span>
+      <h2 class="display">Unwrap a Golden Ticket</h2>
+      <p>Five golden tickets are hidden in chocolate bars around the world. Go on — unwrap yours.</p>
+    </div>
+    <div class="reveal">
+      <div class="choc-stage">
+        <div class="choc-bar" id="chocBar">
+          <div class="ticket-reveal">
+            <div class="golden-ticket">
+              <span class="gt-eyebrow">GOLDEN TICKET</span>
+              <h3 class="display">You Found It!</h3>
+              <p>You're cordially invited to the strangest, sweetest factory tour of your life.</p>
+            </div>
+          </div>
+          <div class="wrapper-half left"></div>
+          <div class="wrapper-half right"></div>
+        </div>
+      </div>
+      <div style="text-align:center;">
+        <button id="unwrapBtn" class="btn stub">🍫 Unwrap the Bar</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OOMPA LOOMPAS -->
+<section class="section" id="oompas">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">Meet the Crew</span>
+      <h2 class="display">The Oompa-Loompas</h2>
+      <p>The factory doesn't run itself. Swap in your own photos for each of these four.</p>
+    </div>
+    <div class="oompa-grid reveal">
+      <div class="oompa-card">
+        <!-- 🖼️ SWAP IMAGE HERE: images/oompa-loompa-1.jpg -->
+        <div class="hex-frame"><img class="user-photo" src="images/oompa2.jpg" alt="Oompa-Loompa, Head of Quality Control" onerror="this.closest('.hex-frame').classList.add('missing'); this.remove();"></div>
+        <h3>Head of Quality Control</h3>
+        <p>Tastes every batch twice, just to be sure. Mostly the chocolate ones.</p>
+      </div>
+      <div class="oompa-card">
+        <!-- 🖼️ SWAP IMAGE HERE: images/oompa-loompa-2.jpg -->
+        <div class="hex-frame"><img class="user-photo" src="images/oompa3.webp" alt="Oompa-Loompa, Chief Cacao Scout" onerror="this.closest('.hex-frame').classList.add('missing'); this.remove();"></div>
+        <h3>Chief Cacao Scout</h3>
+        <p>Has traveled further into the jungle than anyone else on staff, hunting rare beans.</p>
+      </div>
+      <div class="oompa-card">
+        <!-- 🖼️ SWAP IMAGE HERE: images/oompa-loompa-3.jpg -->
+        <div class="hex-frame"><img class="user-photo" src="images/oompa4.webp" alt="Oompa-Loompa, Master of the Assembly Line" onerror="this.closest('.hex-frame').classList.add('missing'); this.remove();"></div>
+        <h3>Master of the Assembly Line</h3>
+        <p>Keeps every gadget in the factory running exactly on schedule.</p>
+      </div>
+      <div class="oompa-card">
+        <!-- 🖼️ SWAP IMAGE HERE: images/oompa-loompa-4.jpg -->
+        <div class="hex-frame"><img class="user-photo" src="images/oompa5.webp" alt="Oompa-Loompa, Keeper of the Inventing Room" onerror="this.closest('.hex-frame').classList.add('missing'); this.remove();"></div>
+        <h3>Keeper of the Inventing Room</h3>
+        <p>The only one allowed near the experimental machinery — most of the time.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CABINET -->
+<style>
+  .jar-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+}
+
+.jar {
+  display: none;
+  width: 500px;
+  height: 300px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.jar.active {
+  display: block;
+}
+
+.glass {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.glass img {
+  width: 600px;
+  height: 600px;
+  object-fit: contain;
+}
+
+.jar h3 {
+  margin: 10px 0;
+}
+
+.jar p {
+  margin: 0 auto;
+  max-width: 450px;
+}
+
+.arrow {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 55px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 10px;
+  line-height: 1;
+}
+</style>
+
+<section class="section" id="cabinet">
+  <div class="wrap">
+    <div class="section-title reveal">
+      <span class="eyebrow">The Workshop</span>
+      <h2 class="display">Inside the Confectionery Cabinet</h2>
+      <p>A small sample of what's bubbling away on his shelves.</p>
+    </div>
+    <div class="jar-carousel reveal">
+    <button class="arrow" id="prevJar">←</button>
+      <div class="jar"><div class="lid"></div><div class="glass"><img src="images/choc.webp" alt="Hover Chocs"></div><h3>Hover Chocs</h3><p>A marvelous morsel, an incredible edible, the Hoverchoc is an exotic combination of purest Wonka chocolate, marshmallow (from the mallow-marshes of Peru), caramel (salted with the bitter-sweet tears of a Russian Clown) and cherry (cherry-picked by the pick of the cherry pickers in the Imperial Gardens of Japan.) A chocolate that lifts you clean off your feet — best eaten sitting down.</p></div>
+      <div class="jar"><div class="lid"></div><div class="glass"><img src="images/giraffe.webp" alt="Giraffe Milk Macaroon"></div><h3>Giraffe Milk Macaroon</h3><p>Made with the distilled milk of a giraffe, this macaroon will restore your zeal and make you feel the tallest in the room. Say farewell to feeling small, and frightened of it all. With Wonka’s Giraffe Milk Macaroon, you’ll feel ten feet tall!</p></div>
+      <div class="jar"><div class="lid"></div><div class="glass"><img src="images/nightout.webp" alt="Big Night Out"></div><h3>Big Night Out</h3><p>A single chocolate that mimics a night on the town. The outer layer is champagne truffle. Then comes white wine, followed by red. That’s when the singing and dancing starts. Next is a layer of whisky fudge (which may prompt deep emotions and reckless behavior), followed by some old port which prompts a deep lasting sleep.</p></div>
+      <div class="jar"><div class="lid"></div><div class="glass"><img src="images/haireclair.webp" alt="Hair Repair Eclair"></div><h3>Hair Repair Eclair</h3><p>Lost your hair? Can’t think quite where? Feeling fairly bare up there? Don’t despair! Wonka’s prepared! Behold his hair repair eclair. Made from ground vanilla, from the mountains of Manila, it includes a single drop of yeti sweat which will prompt full, thick growth. Try mixing it with chameleon juice for even more colorful results!</p></div>
+      <button class="arrow" id="nextJar">→</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const jars = document.querySelectorAll('.jar');
+const prevJar = document.getElementById('prevJar');
+const nextJar = document.getElementById('nextJar');
+
+let currentJar = 0;
+
+jars[currentJar].classList.add('active');
+
+nextJar.addEventListener('click', () => {
+  jars[currentJar].classList.remove('active');
+
+  currentJar = (currentJar + 1) % jars.length;
+
+  jars[currentJar].classList.add('active');
+});
+
+prevJar.addEventListener('click', () => {
+  jars[currentJar].classList.remove('active');
+
+  currentJar = (currentJar - 1 + jars.length) % jars.length;
+
+  jars[currentJar].classList.add('active');
+});
+</script>
+
+<footer>
+  <span class="brand">WONKA</span>
+  Fan-made tribute page · Built with HTML, CSS &amp; JavaScript only · Not affiliated with Warner Bros. or the Roald Dahl Story Company
+</footer>
+
+<!-- 🎵 SWAP AUDIO HERE: put your own track in the /audio folder and update the src below.
+     Suggested filename: audio/wonka-theme.mp3 -->
+<audio id="bgMusic" loop>
+  <source src="audio/song.mp4" type="audio/mpeg">
+</audio>
+
+<div class="music-player" id="musicPlayer">
+  <div class="disc"></div>
+  <button id="musicBtn">▶ Play music</button>
+</div>
+
+<script>
+  // ---------- theme toggle ----------
+  const themeBtn = document.getElementById('themeToggle');
+  themeBtn.addEventListener('click', () => {
+    const isNight = document.body.classList.toggle('night');
+    themeBtn.textContent = isNight ? '☀️ Day' : '🌙 Night';
+    themeBtn.setAttribute('aria-pressed', String(isNight));
+  });
+
+  // ---------- scroll reveal ----------
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add('in'); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // ---------- invention wheel ----------
+  const wheel = document.getElementById('wheel');
+  const spinBtn = document.getElementById('spinBtn');
+  const resultBox = document.getElementById('resultBox');
+  const facts = [
+    "Willy Wonka trained as a magician for years before he ever tempered a bar of chocolate.",
+    "His coat hides more pockets than most people have drawers in their house.",
+    "He arrived in the city with only twelve sovereigns and a suitcase full of dreams.",
+    "A scheming boardinghouse landlady once tricked him into an almost-impossible contract.",
+    "He believes the world could always use a little more magic — and a lot more chocolate.",
+    "Some of his chocolates have been known to make people float clean off the ground.",
+    "He never forgot his mother's promise: good things don't happen to those who just wait.",
+    "Somewhere in his workshop, a certain Oompa-Loompa is quietly stealing his cacao beans."
+  ];
+  const segCount = 8;
+  let currentRotation = 0;
+  let spinning = false;
+
+  // short labels printed on each wedge so the wheel reads clearly even without a custom image
+  const wedgeLabels = [
+    "🎩 Magician Trained",
+    "🧥 Secret Pockets",
+    "💰 Twelve Coins",
+    "📜 Sneaky Contract",
+    "✨ Believes in Magic",
+    "🎈 Floating Chocolate",
+    "💭 Mother's Promise",
+    "🍫 Sticky-Fingers"
+  ];
+
+  wedgeLabels.forEach((text, i) => {
+    const label = document.createElement('div');
+    label.className = 'seg-label';
+    label.textContent = text;
+    const angle = (i * 45) + 22.5; // center of each 45deg slice
+    label.style.transform = `translateY(-50%) rotate(${angle}deg)`;
+    wheel.appendChild(label);
+  });
+
+  // if a custom wheel image loads successfully, hide the printed labels so they don't overlap it
+  const wheelImg = wheel.querySelector('img.wheel-image');
+  if (wheelImg) {
+    const markLoaded = () => wheel.classList.add('has-image');
+    if (wheelImg.complete && wheelImg.naturalWidth > 0) markLoaded();
+    wheelImg.addEventListener('load', markLoaded);
+  }
+
+  spinBtn.addEventListener('click', () => {
+    if (spinning) return;
+    spinning = true; spinBtn.disabled = true;
+    resultBox.classList.remove('show');
+
+    const targetIndex = Math.floor(Math.random() * segCount);
+    const sliceAngle = 360 / segCount;
+    const segCenter = targetIndex * sliceAngle + sliceAngle / 2;
+    const baseTarget = (360 - segCenter) % 360;
+    const currentMod = ((currentRotation % 360) + 360) % 360;
+    let delta = baseTarget - currentMod;
+    if (delta < 0) delta += 360;
+    currentRotation += delta + (5 * 360);
+    wheel.style.transform = `rotate(${currentRotation}deg)`;
+
+    setTimeout(() => {
+      resultBox.innerHTML = `<b>🎉 FACT REVEALED</b>${facts[targetIndex]}`;
+      resultBox.classList.add('show');
+      spinning = false; spinBtn.disabled = false;
+    }, 3500);
+  });
+
+  // ---------- golden ticket unwrap ----------
+  const chocBar = document.getElementById('chocBar');
+  const unwrapBtn = document.getElementById('unwrapBtn');
+  let unwrapped = false;
+
+  function burstConfetti(){
+    const colors = ['#D4A017', '#6B1424', '#2F5233', '#F3E7CE'];
+    for (let i = 0; i < 40; i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti';
+      piece.style.left = Math.random() * 100 + 'vw';
+      piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+      piece.style.animationDuration = (2 + Math.random()*1.5) + 's';
+      document.body.appendChild(piece);
+      setTimeout(() => piece.remove(), 3600);
+    }
+  }
+
+  unwrapBtn.addEventListener('click', () => {
+    unwrapped = !unwrapped;
+    chocBar.classList.toggle('unwrapped', unwrapped);
+    unwrapBtn.textContent = unwrapped ? '🍬 Wrap It Back Up' : '🍫 Unwrap the Bar';
+    if (unwrapped) burstConfetti();
+  });
+
+  // ---------- background music ----------
+  const bgMusic = document.getElementById('bgMusic');
+  const musicPlayer = document.getElementById('musicPlayer');
+  const musicBtn = document.getElementById('musicBtn');
+  let playing = false;
+
+  musicBtn.addEventListener('click', () => {
+    if (!playing){
+      bgMusic.play().then(() => {
+        playing = true;
+        musicPlayer.classList.add('playing');
+        musicBtn.textContent = '⏸ Pause music';
+      }).catch(() => {
+        musicBtn.textContent = '⚠ Add a track to /audio';
+      });
+    } else {
+      bgMusic.pause();
+      playing = false;
+      musicPlayer.classList.remove('playing');
+      musicBtn.textContent = '▶ Play music';
+    }
+  });
+</script>
+
+</body>
+</html>
