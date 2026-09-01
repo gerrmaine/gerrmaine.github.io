@@ -1,0 +1,97 @@
+
+* {
+    box-sizing: border-box;
+}
+
+/* 0) Base page */
+body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: 'Patrick Hand', cursive;
+
+    /* tiled food pattern background, with a translucent white layer
+       over it so the page stays readable */
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.55)),
+        url("images/food-bg.jpg");
+    background-repeat: repeat;
+    background-size: 320px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+/* 1) Stage: holds both images + bio, centered */
+.stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    flex-wrap: wrap;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* 2) Cow: continuous wiggle */
+.cow {
+    width: 190px;
+    height: 190px;
+    object-fit: cover;
+    border: 5px solid white;
+    border-radius: 16px;
+    box-shadow: 0 0 4px;
+    animation: wiggle 1.6s ease-in-out infinite;
+    transform-origin: 50% 90%;
+}
+
+@keyframes wiggle {
+    0%, 100% { transform: rotate(-6deg); }
+    50%      { transform: rotate(6deg); }
+}
+
+/* 3) Shrek: wiggle + grow on hover */
+.shrek {
+    width: 190px;
+    height: 190px;
+    object-fit: cover;
+    border: 5px solid white;
+    border-radius: 16px;
+    box-shadow: 0 0 4px;
+    transition: transform 0.25s ease;
+}
+
+.shrek:hover {
+    animation: wiggle-grow 0.5s ease-in-out;
+    transform: scale(1.35);
+}
+
+@keyframes wiggle-grow {
+    0%   { transform: scale(1) rotate(0deg); }
+    25%  { transform: scale(1.15) rotate(-8deg); }
+    50%  { transform: scale(1.25) rotate(8deg); }
+    75%  { transform: scale(1.3) rotate(-4deg); }
+    100% { transform: scale(1.35) rotate(0deg); }
+}
+
+/* 4) Bio box */
+.bio {
+    font-family: 'Baloo 2', cursive;
+    font-weight: 500;
+    font-size: 26px;
+    color: #3a2b20;
+    background-color: white;
+    border: 3px white;
+    border-radius: 18px;
+    padding: 22px 28px;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 0 4px;
+}
+
+/* respect users who've asked for less motion */
+@media (prefers-reduced-motion: reduce) {
+    .cow { animation: none; }
+    .shrek:hover { animation: none; transform: none; }
+}
